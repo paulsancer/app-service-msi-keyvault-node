@@ -1,9 +1,9 @@
-const express = require("express");
-const msRestAzure = require("ms-rest-azure");
-const KeyVault = require("azure-keyvault");
-const bodyParser = require("body-parser");
+const express = require('express');
+const msRestAzure = require('ms-rest-azure');
+const KeyVault = require('azure-keyvault');
+const bodyParser = require('body-parser');
 
-const KEY_VAULT_URI = null || process.env["KEY_VAULT_URI"];
+const KEY_VAULT_URI = null || process.env['KEY_VAULT_URI'];
 
 let app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -11,16 +11,16 @@ app.use(bodyParser.json());
 
 function getKeyVaultCredentials() {
   return msRestAzure.loginWithAppServiceMSI({
-    resource: "https://vault.azure.net"
+    resource: 'https://vault.azure.net'
   });
 }
 
 function getKeyVaultSecret(secret, credentials) {
   let keyVaultClient = new KeyVault.KeyVaultClient(credentials);
-  return keyVaultClient.getSecret(KEY_VAULT_URI, secret, "");
+  return keyVaultClient.getSecret(KEY_VAULT_URI, secret, '');
 }
 
-app.get("/", function(req, res) {
+app.get('/', function(req, res) {
   const { secret } = req.query;
 
   getKeyVaultCredentials()
@@ -34,15 +34,15 @@ app.get("/", function(req, res) {
 });
 
 // This endpoint is only for testing whether an app setting was present or not, please ignore
-app.get("/appsettings", function(req, res) {
+app.get('/appsettings', function(req, res) {
   const { setting } = req.query;
   const settingValue = process.env[setting];
   if (settingValue) res.send(settingValue);
   else res.status(404).send(`Not Found: '${setting}'.`);
 });
 
-app.get("/ping", function(req, res) {
-  res.send("Hello World!!!");
+app.get('/ping', function(req, res) {
+  res.send('Hello World!!!');
 });
 
 let port = process.env.PORT || 3000;
