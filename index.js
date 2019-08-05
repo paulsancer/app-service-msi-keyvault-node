@@ -1,42 +1,52 @@
-const express = require('express');
-const msRestAzure = require('ms-rest-azure');
-const KeyVault = require('azure-keyvault');
-const KEY_VAULT_URI = null || process.env['KEY_VAULT_URI'];
+const express = require("express");
+const msRestAzure = require("ms-rest-azure");
+const KeyVault = require("azure-keyvault");
+const bodyParser = require("body-parser");
+
+const KEY_VAULT_URI = null || process.env["KEY_VAULT_URI"];
 
 let app = express();
-let clientId = process.env['CLIENT_ID']; // service principal
-let domain = process.env['DOMAIN']; // tenant id
-let secret = process.env['APPLICATION_SECRET'];
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-function getKeyVaultCredentials(){
-  if (process.env.APPSETTING_WEBSITE_SITE_NAME){
-    return msRestAzure.loginWithAppServiceMSI();
-  } else {
-    return msRestAzure.loginWithServicePrincipalSecret(clientId, secret, domain);
-  }
-}
-
-function getKeyVaultSecret(credentials) {
-  let keyVaultClient = new KeyVault.KeyVaultClient(credentials);
-  return keyVaultClient.getSecret(KEY_VAULT_URI, 'secret', "");
-}
-
-app.get('/', function (req, res) {
-  getKeyVaultCredentials().then(
-    getKeyVaultSecret
-  ).then(function (secret){
-    res.send(`Your secret value is: ${secret.value}.`);
-  }).catch(function (err) {
-    res.send(err);
+function getKeyVaultCredentials() {
+  return msRestAzure.loginWithAppServiceMSI({
+    resource: "https://vault.azure.net"
   });
+}
+
+function getKeyVaultSecret(secret, credentials) {
+  let keyVaultClient = new KeyVault.KeyVaultClient(credentials);
+  return keyVaultClient.getSecret(KEY_VAULT_URI, secret, "");
+}
+
+app.get("/", function(req, res) {
+  const { secret } = req.query;
+
+  getKeyVaultCredentials()
+    .then(credentials => getKeyVaultSecret(secret, credentials))
+    .then(function(secret) {
+      res.send(`Your secret value is: ${secret.value}.`);
+    })
+    .catch(function(err) {
+      res.send(err);
+    });
 });
 
-app.get('/ping', function (req, res) {
-  res.send('Hello World!!!');
+// This endpoint is only for testing whether an app setting was present or not, please ignore
+app.get("/appsettings", function(req, res) {
+  const { setting } = req.query;
+  const settingValue = process.env[setting];
+  if (settingValue) res.send(settingValue);
+  else res.status(404).send(`Not Found: '${setting}'.`);
+});
+
+app.get("/ping", function(req, res) {
+  res.send("Hello World!!!");
 });
 
 let port = process.env.PORT || 3000;
 
-app.listen(port, function () {
+app.listen(port, function() {
   console.log(`Server running at http://localhost:${port}`);
 });
