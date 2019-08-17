@@ -20,6 +20,11 @@ function getKeyVaultSecret(secret, credentials) {
   return keyVaultClient.getSecret(KEY_VAULT_URI, secret, '');
 }
 
+function getKeyVaultSecrets(credentials) {
+  let keyVaultClient = new KeyVault.KeyVaultClient(credentials);
+  return keyVaultClient.getSecrets(KEY_VAULT_URI);
+}
+
 app.get('/', function(req, res) {
   const { secret } = req.query;
 
@@ -31,6 +36,27 @@ app.get('/', function(req, res) {
     .catch(function(err) {
       res.send(err);
     });
+});
+app.get('/api/secrets', function(req, res) {
+  const { secret } = req.query;
+  if (secret)
+    getKeyVaultCredentials()
+      .then(credentials => getKeyVaultSecret(secret, credentials))
+      .then(function(secret) {
+        res.send(`Your secret value is: ${secret.value}.`);
+      })
+      .catch(function(err) {
+        res.send(err);
+      });
+  else
+    getKeyVaultCredentials()
+      .then(credentials => getKeyVaultSecrets(credentials))
+      .then(function(secrets) {
+        res.json(secrets);
+      })
+      .catch(function(err) {
+        res.send(err);
+      });
 });
 
 // This endpoint is only for testing whether an app setting was present or not, please ignore
