@@ -30,14 +30,14 @@ async function config() {
       const secretName = secretObject.id.split('/secrets/')[1];
       // fetch secret value
       const secret = await getKeyVaultSecret(secretName);
-      console.log('FOUND SECRET: ');
+      console.log('Loading secret...');
       console.dir(secret);
 
       // load into env
       process.env[secret.name] = secret.value;
       return secret;
     });
-    return secrets;
+    return await Promise.all(secrets);
   } catch (error) {
     console.error(
       'Error loading secrets from Azure Key Vault to process.env:',
