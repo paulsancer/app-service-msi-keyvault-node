@@ -30,12 +30,13 @@ async function config() {
       const secretName = secretObject.id.split('/secrets/')[1];
       // fetch secret value
       const secret = await getKeyVaultSecret(secretName);
-      console.log('Loading secret...');
-      console.dir(secret);
 
       // load into env
       const isInEnv = process.env.hasOwnProperty(secretName);
-      if (!isInEnv) process.env[secretName] = secret.value;
+      if (!isInEnv) {
+        console.log(`Loading secret'${secretName}'...`);
+        process.env[secretName] = secret.value;
+      }
       return { name: secretName, value: secret.value, loaded: !isInEnv };
     });
     return await Promise.all(secrets);

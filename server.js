@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === 'production') {
   (async () => {
     try {
       const secrets = await azKeyVault.config();
-      console.dir(secrets);
+      //   console.dir(secrets);
       start();
     } catch (error) {
       throw error;
