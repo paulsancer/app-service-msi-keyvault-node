@@ -30,6 +30,9 @@ async function config() {
       const secretName = secretObject.id.split('/secrets/')[1];
       // fetch secret value
       const secret = await getKeyVaultSecret(secretName);
+      console.log('FOUND SECRET: ');
+      console.dir(secret);
+
       // load into env
       process.env[secret.name] = secret.value;
       return secret;
