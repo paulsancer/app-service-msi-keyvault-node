@@ -34,8 +34,9 @@ async function config() {
       console.dir(secret);
 
       // load into env
-      process.env[secret.name] = secret.value;
-      return secret;
+      const isInEnv = process.env.hasOwnProperty(secretName);
+      if (!isInEnv) process.env[secretName] = secret.value;
+      return { name: secretName, value: secret.value, loaded: !isInEnv };
     });
     return await Promise.all(secrets);
   } catch (error) {
