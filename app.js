@@ -3,9 +3,11 @@ const msRestAzure = require('ms-rest-azure');
 const KeyVault = require('azure-keyvault');
 const bodyParser = require('body-parser');
 
+const azKeyVault = require('./azKeyVault');
+
 const KEY_VAULT_URI = null || process.env['KEY_VAULT_URI'];
 
-let app = express();
+const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -59,20 +61,15 @@ app.get('/api/secrets', function(req, res) {
       });
 });
 
-// This endpoint is only for testing whether an app setting was present or not, please ignore
-app.get('/appsettings', function(req, res) {
-  const { setting } = req.query;
-  const settingValue = process.env[setting];
+app.get('/api/appsettings', function(req, res) {
+  const { key } = req.query;
+  const settingValue = process.env[key];
   if (settingValue) res.send(settingValue);
-  else res.status(404).send(`Not Found: '${setting}'.`);
+  else res.status(404).send(`Not Found: '${key}'.`);
 });
 
 app.get('/ping', function(req, res) {
   res.send('Hello World!!!');
 });
 
-let port = process.env.PORT || 3000;
-
-app.listen(port, function() {
-  console.log(`Server running at http://localhost:${port}`);
-});
+module.exports = app;
