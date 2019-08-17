@@ -6,7 +6,7 @@ function start() {
   const port = process.env.PORT || 4000;
 
   app.listen(port, () => {
-    logger.info(`App listening on port ${port}`);
+    console.info(`App listening on port ${port}`);
   });
 }
 
