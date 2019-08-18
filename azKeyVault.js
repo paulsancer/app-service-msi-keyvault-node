@@ -34,7 +34,7 @@ async function config() {
       // load into env
       const isInEnv = process.env.hasOwnProperty(secretName);
       if (!isInEnv) {
-        console.log(`Loading secret'${secretName}'...`);
+        console.log(`Loading secret '${secretName}'...`);
         process.env[secretName] = secret.value;
       }
       return { name: secretName, value: secret.value, loaded: !isInEnv };
