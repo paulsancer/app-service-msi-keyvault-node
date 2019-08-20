@@ -1,6 +1,6 @@
-const app = require('./app');
+const app = require("./app");
 // const dotenv = require('dotenv');
-const azKeyVault = require('./azKeyVault');
+const azKeyVault = require("./azKeyVault");
 
 function start() {
   const port = process.env.PORT || 4000;
@@ -10,18 +10,18 @@ function start() {
   });
 }
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.MSI_ENDPOINT) {
   (async () => {
     try {
       const secrets = await azKeyVault.config();
-      //   console.dir(secrets);
-      start();
+      console.dir(secrets);
     } catch (error) {
       throw error;
     }
+    start();
   })();
 } else {
   // dotenv.config();
-  console.log('WOULD LOAD DOTENV HERE BEFORE STARTING THE SERVER');
+  console.log("WOULD LOAD DOTENV HERE BEFORE STARTING THE SERVER");
   start();
 }

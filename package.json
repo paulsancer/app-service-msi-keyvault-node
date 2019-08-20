@@ -9,12 +9,10 @@
     "node": ">=6.9.1"
   },
   "dependencies": {
-    "async": "^2.6.0",
-    "azure-arm-keyvault": "1.1.0-preview",
-    "azure-keyvault": "^3.0.0-preview",
+    "azure-keyvault": "^3.0.4",
+    "ms-rest-azure": "^3.0.0",
     "express": "^4.16.2",
     "ms-rest": "^2.3.0",
-    "ms-rest-azure": "^2.5.2",
     "util": "0.10.3"
   },
   "scripts": {
