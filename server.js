@@ -16,7 +16,7 @@ if (process.env.MSI_ENDPOINT) {
       const secrets = await azKeyVault.config();
       console.dir(secrets);
     } catch (error) {
-      throw error;
+      console.error(error);
     }
     start();
   })();
