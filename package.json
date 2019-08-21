@@ -9,8 +9,6 @@
     "node": ">=6.9.1"
   },
   "dependencies": {
-    "@azure/identity": "^1.0.0-preview.2",
-    "@azure/keyvault-secrets": "^4.0.0-preview.4",
     "azure-keyvault": "^3.0.0-preview",
     "body-parser": "^1.19.0",
     "express": "^4.16.2",
