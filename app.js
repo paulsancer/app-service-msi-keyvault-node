@@ -43,7 +43,7 @@ app.get('/api/secrets', async (req, res) => {
   const { secret } = req.query;
   if (secret) {
     try {
-      const secretRes = keyVault.getKeyVaultSecret(secret);
+      const secretRes = await keyVault.getKeyVaultSecret(secret);
       console.log(secretRes);
       return res.json(secretRes);
     } catch (error) {
