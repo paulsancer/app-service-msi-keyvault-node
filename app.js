@@ -2,7 +2,7 @@ const express = require('express');
 // const msRestAzure = require('ms-rest-azure');
 // const KeyVault = require('azure-keyvault');
 const bodyParser = require('body-parser');
-const keyVault = require('./keyVault');
+const keyVault = require('./azKeyVault');
 
 // const { KeyVaultName } = process.env;
 
@@ -43,20 +43,21 @@ app.get('/api/secrets', async (req, res) => {
   const { secret } = req.query;
   if (secret) {
     try {
-      const secretRes = keyVault.getSecret(secret);
+      const secretRes = keyVault.getKeyVaultSecret(secret);
       return res.json(secretRes);
     } catch (error) {
       console.error(error);
       return res.status(500).json(error);
     }
   } else {
-    try {
-      const secrets = keyVault.getAllSecrets();
-      return res.json(secrets);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json(error);
-    }
+    return res.status(400).send('NOT IMPLEMENTED');
+    // try {
+    //   const secrets = keyVault.getAllSecrets();
+    //   return res.json(secrets);
+    // } catch (error) {
+    //   console.error(error);
+    //   return res.status(500).json(error);
+    // }
   }
 });
 

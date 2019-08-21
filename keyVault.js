@@ -16,7 +16,7 @@ async function getSecret(secretName) {
     return res;
   } catch (error) {
     console.error(error);
-    return null;
+    throw error;
   }
 }
 
@@ -33,7 +33,7 @@ async function getAllSecrets() {
     return secrets;
   } catch (error) {
     console.error(error);
-    return null;
+    throw error;
   }
 }
 
