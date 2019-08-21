@@ -12,10 +12,12 @@ async function init() {
     // to avoid more app settings?
     resource: 'https://vault.azure.net'
   });
+  console.error('keyVaultCredentials: ', keyVaultCredentials);
   keyVaultClient = new KeyVault.KeyVaultClient(keyVaultCredentials);
 }
 
 async function getKeyVaultSecret(secret) {
+  await init();
   return keyVaultClient.getSecret(KEY_VAULT_URI, secret, '');
 }
 
