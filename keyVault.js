@@ -1,10 +1,12 @@
-import { ManagedIdentityCredential } from '@azure/identity';
-import { SecretsClient } from '@azure/keyvault-secrets';
+// import { ManagedIdentityCredential } from '@azure/identity';
+// import { SecretsClient } from '@azure/keyvault-secrets';
+const { ManagedIdentityCredential } = require('@azure/identity');
+const { SecretsClient } = require('@azure/keyvault-secrets');
 
 const vaultName = process.env.KeyVaultName;
 const url = `https://${vaultName}.vault.azure.net`;
 
-const credential = ManagedIdentityCredential();
+const credential = new ManagedIdentityCredential();
 const client = new SecretsClient(url, credential);
 
 async function getSecret(secretName) {
