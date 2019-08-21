@@ -47,7 +47,7 @@ app.get('/api/secrets', async (req, res) => {
       console.log(secretRes);
       return res.json(secretRes);
     } catch (error) {
-      console.error(error);
+      console.error('getKeyVaultSecret: ', error);
       return res.status(500).json(error);
     }
   } else {
