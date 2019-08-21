@@ -16,7 +16,7 @@ async function init() {
 }
 
 async function getKeyVaultSecret(secret) {
-  return keyVaultClient.getSecret(KEY_VAULT_URI, secret, '');
+  return keyVaultClient.getSecret(KEY_VAULT_URI, secret, {});
 }
 
 async function config() {
