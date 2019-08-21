@@ -16,7 +16,6 @@ async function init() {
 }
 
 async function getKeyVaultSecret(secret) {
-  keyVaultClient = new KeyVault.KeyVaultClient(keyVaultCredentials);
   return keyVaultClient.getSecret(KEY_VAULT_URI, secret, '');
 }
 
@@ -49,4 +48,4 @@ async function config() {
   }
 }
 
-module.exports = { config };
+module.exports = { config, getKeyVaultSecret };

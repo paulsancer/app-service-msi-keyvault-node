@@ -39,25 +39,24 @@ app.get('/', function(req, res) {
       res.send(err);
     });
 });
-app.get('/api/secrets', function(req, res) {
+app.get('/api/secrets', async function(req, res) {
   const { secret } = req.query;
-  if (secret)
-    getKeyVaultCredentials()
-      .then(credentials => getKeyVaultSecret(secret, credentials))
-      .then(function(secret) {
-        res.send(`Your secret value is: ${secret.value}.`);
-      })
-      .catch(function(err) {
-        res.send(err);
-      });
-  else
+  if (secret) {
+    try {
+      const secret = azKeyVault.getKeyVaultSecret(secret);
+      return res.json(secret);
+    } catch (error) {
+      console.error(error);
+    }
+  } else
     getKeyVaultCredentials()
       .then(credentials => getKeyVaultSecrets(credentials))
       .then(function(secrets) {
         res.json(secrets);
       })
       .catch(function(err) {
-        res.send(err);
+        console.error(err);
+        return res.status(500).send(err);
       });
 });
 
